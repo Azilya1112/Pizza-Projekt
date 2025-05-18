@@ -1,0 +1,284 @@
+/* Общие стили для flex-контейнеров */
+.display-flex,
+.display-flex-center,
+.signup-content,
+.signin-content,
+.social-login,
+.socials {
+  display: flex;
+  display: -webkit-flex;
+}
+
+/* Стили для списка (удаление маркеров и отступов) */
+.list-type-ulli,
+.socials {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Шрифты Poppins (попробуем использовать только одну серию для упрощения) */
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  src: url("../fonts/poppins/poppins-v5-latin-300.woff2") format("woff2"),
+       url("../fonts/poppins/poppins-v5-latin-300.woff") format("woff"),
+       url("../fonts/poppins/poppins-v5-latin-300.ttf") format("truetype");
+}
+
+/* Основной стиль для ссылок (без подчеркивания и с плавными переходами) */
+a:focus, a:active {
+  text-decoration: none;
+  outline: none;
+  transition: all 300ms ease;
+}
+
+/* Очистка фокуса и границ для форм */
+input, select, textarea {
+  outline: none;
+  appearance: unset !important;
+}
+
+/* Стили для инпутов */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  appearance: none !important;
+  margin: 0;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: none !important;
+}
+
+/* Стили для чекбоксов и радио кнопок */
+input[type=checkbox],
+input[type=radio] {
+  appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  -webkit-appearance: checkbox !important;
+  -o-appearance: checkbox !important;
+  -ms-appearance: checkbox !important;
+}
+
+/* Основной фон для главной секции */
+.main {
+  background: #FFF;
+  padding: 50px 0; }
+
+  body {
+    font-size: 13px;
+    line-height: 1.8;
+    color: #222;
+    background: #FFF;
+    font-weight: 400;
+    font-family: Poppins; }
+	
+		.product_image {
+	          display: flex;
+	          align-items: center;
+	          justify-content: center;
+	          padding-top: 16px;
+	          padding-bottom: 16px;
+	      }
+
+	      .product_image img {
+	          width: 190px;
+	          height: 190px;
+	          object-fit: cover;
+	          border-radius: 8px;
+	      }
+
+	      .card-img-top {
+	          width: 190px;
+	          height: 190px;
+	          object-fit: cover;
+	          border-radius: 8px;
+	      }
+		  
+		  .pizza-card{
+			border-radius: 15px;
+		  }
+
+/* Стили для футера */
+.footer-basic {
+  padding: 40px 0;
+  background-color: #ffffff;
+  color: #4b4c4d;
+}
+
+.footer-basic ul {
+  padding: 0;
+  list-style: none;
+  text-align: center;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.footer-basic li {
+  padding: 0 10px;
+}
+
+.footer-basic ul a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.footer-basic ul a:hover {
+  opacity: 1;
+}
+
+/* Стили для социальных иконок */
+.footer-basic .social {
+  text-align: center;
+  padding-bottom: 25px;
+}
+
+.footer-basic .social > a {
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: inline-block;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid #ccc;
+  margin: 0 8px;
+  color: inherit;
+  opacity: 0.75;
+}
+
+.footer-basic .social > a:hover {
+  opacity: 0.9;
+}
+
+/* Копирайт в футере */
+.footer-basic .copyright {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #aaa;
+  margin-bottom: 0;
+}
+
+.about-us {
+    padding: 60px 0;
+
+}
+
+.about-us h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+
+.about-us p {
+    font-size: 1rem;
+    color: #666;
+
+    line-height: 1.6;
+}
+
+.value-item {
+    background-color: #fff;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.value-item:hover {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.value-item img {
+    border-radius: 50%;
+}
+
+.btn-primary {
+    background-color: #ff7f7f;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #ff4f4f;
+}
+.hero-section {
+    position: relative; 
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                url('/images/pizza3.png') center center / cover no-repeat;
+    padding: 100px 0;
+    color: #fff;
+    text-align: center;
+    overflow: hidden;
+	margin-bottom: 70px;
+}
+
+.hero-section .wave {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%; 
+    height: 100px;
+    line-height: 0;
+    z-index: 1; 
+}
+
+.wave svg {
+    display: block;
+    width: 100%;
+    height: 100px;
+}
+
+
+.hero-section h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.hero-section p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+.hero-section .btn {
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+.hero-section .btn-dark {
+    background-color: #333;
+    border: none;
+    color: #fff;
+}
+
+.hero-section .btn-dark:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+.hero-section .btn-outline-light {
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    background: none;
+}
+
+.hero-section .btn-outline-light:hover {
+    background-color: #ffffff;
+    color: #ff8800;
+}
+
+

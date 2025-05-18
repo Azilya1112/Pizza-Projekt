@@ -1,0 +1,61 @@
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Eclipse
+.project
+.metadata
+bin/
+tmp/
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# Gradle
+.gradle
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+*/build
+/build/
+*/dist/
+
+# macOS
+.DS_Store
+
+# STS (Spring Tool Suite)
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# Java specific
+*.iml
+
+# Log files
+*.log
+
+# General OS Files (e.g., macOS and Windows)
+.DS_Store
+Thumbs.db
+keystore.jks

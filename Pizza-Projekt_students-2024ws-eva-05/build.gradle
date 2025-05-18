@@ -1,0 +1,44 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.3'
+	id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '21'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+ implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+ implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+ implementation 'org.springframework.boot:spring-boot-starter-web'
+ runtimeOnly 'com.h2database:h2'
+ testImplementation 'org.springframework.boot:spring-boot-starter-test'
+ testImplementation 'org.springframework.security:spring-security-test'
+ testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+ testImplementation 'org.springframework.security:spring-security-test'
+ implementation 'org.springframework.boot:spring-boot-starter'
+ implementation 'org.springframework.boot:spring-boot-starter-validation'
+ implementation 'org.springframework.security:spring-security-core'
+ implementation 'org.springframework.boot:spring-boot-starter-security' 
+ implementation 'org.springframework.security:spring-security-config'
+    implementation 'org.springframework.security:spring-security-crypto'
+    implementation 'org.springframework.security:spring-security-web'
+ implementation 'org.mockito:mockito-core:5.5.0'
+implementation 'org.mockito:mockito-junit-jupiter:5.5.0'
+implementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+implementation 'org.apache.httpcomponents.client5:httpclient5:5.3.1'
+implementation 'org.apache.httpcomponents.core5:httpcore5:5.3.1'
+ 
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}

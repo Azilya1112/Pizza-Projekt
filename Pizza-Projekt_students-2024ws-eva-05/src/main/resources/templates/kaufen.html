@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kaufen - MyPizza4Ever</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+	<link rel="preload" href="/css/main.css" as="style" />
+	<link rel="stylesheet" href="/css/main.css">
+</head>
+
+<script src="/script/script.js"></script>
+<style>
+    #customAlert {
+        display: none;
+        position: fixed;
+        top: 30%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #282c34;
+        color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        z-index: 1000;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    #customAlert button {
+        margin-top: 15px;
+        padding: 10px 20px;
+        background-color: #d9534f;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    #customAlert button:hover {
+        background-color: #c9302c;
+    }
+</style>
+
+
+
+
+<body>
+<div class="container mt-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h1>
+            <img src="/images/favicon.png" style="width: 50px; height: 50px; vertical-align: middle;">
+            MyPizza4Ever
+        </h1>
+    </header>
+
+    <div id="customAlert">
+        <h3 id="customAlertTitle">MobilePayApp</h3>
+        <p id="customAlertMessage">Die Zahlung ist fehlgeschlagen. Bitte versuchen Sie es erneut.</p>
+        <button onclick="closeCustomAlert()">OK</button>
+    </div>
+
+    <script>
+        function showCustomAlert(title, message) {
+            const alertBox = document.getElementById('customAlert');
+            const alertTitle = document.getElementById('customAlertTitle');
+            const alertMessage = document.getElementById('customAlertMessage');
+
+            alertTitle.innerText = title; // Set custom title
+            alertMessage.innerText = message; // Set custom message
+
+            alertBox.style.display = 'block'; // Show the alert box
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlert').style.display = 'none'; // Hide the alert box
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const error = urlParams.get('error');
+
+        if (error === 'insufficient_funds') {
+            showCustomAlert('MobilePayApp', 'Sie haben nicht genügend Guthaben auf Ihrem Konto. Bitte laden Sie Ihr Konto auf oder verringern Sie den Bestellbetrag.');
+        } else if (error === 'transfer_failed') {
+            showCustomAlert('MobilePayApp', 'Die Zahlung ist fehlgeschlagen. Bitte versuchen Sie es erneut.');
+        }
+    </script>
+
+    <div class="row">
+
+
+        <div class="col-md-8">
+            <!-- Cart Overview -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Ihr Warenkorb</h5>
+                </div>
+                <div class="card-body">
+                    <div th:if="${cart != null}">
+                        <div th:each="item : ${cart.items}">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    <h6 th:text="${item.pizza.name}">Pizza Name</h6>
+                                    <small th:text="'Größe: ' + ${item.size}"></small>
+                                    <small th:text="'|'"></small>
+                                    <small th:text="'Menge: ' + ${item.quantity}"></small>
+                                </div>
+                                <div>
+                                    <span th:text="'€ ' + ${item.price}"></span>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        <div class="text-end">
+                            <p><strong>Gesamtbetrag:</strong> <span th:text="'€ ' + ${cart.totalPrice}"></span></p>
+                        </div>
+                    </div>
+                    <div th:if="${cart == null}">
+                        <p>Ihr Warenkorb ist leer.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Selection -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Adresse auswählen oder eingeben</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Adresse</label>
+                        <select id="address" class="form-select" name="selectedAddressId" onchange="handleAddressChange()">
+                            <option value="" disabled
+                                    th:attr="selected=${selectedAddressId == null}">
+                                Wählen Sie eine Adresse
+                            </option>
+                            <option th:each="address : ${deliveryAddresses}"
+                                    th:attr="value=${address.id}, selected=${selectedAddressId == address.id}"
+                                    th:text="${address.street} + ' ' + ${address.houseNumber} + ', ' + ${address.postalCode} + ' ' + ${address.town}">
+                            </option>
+                            <option value="new"
+                                    th:attr="selected=${selectedAddressId == 'new'}">
+                                Neue Adresse
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- New Address Form -->
+                    <div id="newAddressForm" th:style="${param.selectedAddress == 'new' ? 'display: block;' : 'display: none;'}">
+                        <form action="/neue-address" method="post" class="row g-2">
+                            <div class="col-12">
+                                <label for="street" class="form-label">Straße</label>
+                                <input type="text" class="form-control" id="street" name="street" placeholder="Straße" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="houseNumber" class="form-label">Hausnummer</label>
+                                <input type="text" class="form-control" id="houseNumber" name="houseNumber" placeholder="Nr." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="postalCode" class="form-label">PLZ</label>
+                                <input type="text" class="form-control" id="postalCode" name="postalCode" placeholder="PLZ" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="town" class="form-label">Stadt</label>
+                                <input type="text" class="form-control" id="town" name="town" placeholder="Stadt" required>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary btn-sm">Adresse speichern</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Payment Information -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5>Zahlungsinformationen</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="cardName" class="form-label">Name auf der Karte</label>
+                            <input type="text" class="form-control" id="cardName" placeholder="Name eingeben" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Kartennummer</label>
+                            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9101 1121" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expiryDate" class="form-label">Gültig bis</label>
+                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary & Buy Button -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Zusammenfassung</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Gesamtanzahl der Pizzas:</strong><span th:text="${totalQuantity}"></span></p>
+                    <p><strong>Gesamtbetrag:</strong> <span th:text="'€ ' + ${cart.totalPrice}"></span></p>
+
+                    <form action="/checkout" method="post">
+                        <input type="hidden" id="selectedAddressDTOid" name="selectedAddressDTOid" value=""
+                               th:attr="value=${selectedAddressId}">
+                        <button type="submit" id="checkoutButton" class="btn btn-success w-100 mt-3 disabled">Jetzt kaufen</button>
+                    </form>
+
+
+
+                    <a href="javascript:history.back()" class="btn btn-secondary w-100 mt-3">Zurück</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

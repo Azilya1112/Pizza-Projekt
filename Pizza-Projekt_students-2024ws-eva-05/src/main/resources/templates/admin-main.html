@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - MyPizza4Ever</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="preload" href="/css/main.css" as="style" />
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="icon" href="/favicon.png" sizes="32x32" type="image/png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+  <style>
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .product_image {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .product_image img {
+      width: 190px;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .card-body {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-4">
+  <!-- Header -->
+
+  <header class="d-flex justify-content-between align-items-center mb-4">
+    <h1>
+      <img src="/images/favicon.png" style="width: 50px; height: 50px; vertical-align: middle;">
+      Admin Panel - MyPizza4Ever
+    </h1>
+
+
+    <div class="d-flex">
+
+        <div th:if="${username != null}" class="dropdown">
+            <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center"
+                    id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-user"></i> <!-- Font Awesome Icon -->
+                <span class="ms-2" th:text="${username}">Username</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="/profile-settings">Profileinstellungen</a></li>
+                <li><a class="dropdown-item text-danger" href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </div>
+  </header>
+
+  <!-- Admin Menu -->
+  <div class="mb-4">
+    <a href="/admin/pizzas/new" class="btn btn-primary me-2">
+      <i class="fas fa-plus"></i> Neue Pizza hinzufügen
+    </a>
+    <a href="/admin/users" class="btn btn-outline-primary">
+      <i class="fas fa-users"></i> Benutzer anzeigen
+    </a>
+  </div>
+
+  <!-- Pizza List -->
+  <div class="row" id="pizza-container">
+    <div th:each="pizza : ${pizzas}" class="col-md-3 mb-3">
+      <div class="card">
+        <div class="product_image">
+          <img th:src="@{${pizza.image}}" class="card-img-top" th:alt="${pizza.name}">
+        </div>
+
+        <div class="card-body">
+          <h5 class="card-title" th:text="${pizza.name}">Pizza Name</h5>
+
+          <!-- Форма для добавления пиццы в корзину -->
+          <form th:action="@{/add-to-cart}" method="post">
+            <!-- ID пиццы -->
+            <input type="hidden" th:name="pizzaId" th:value="${pizza.id}">
+
+            <!-- Поле для выбора размера пиццы -->
+            <label for="size">Größe:</label>
+            <select th:name="size" class="form-select">
+              <option value="SMALL">Small</option>
+              <option value="MEDIUM" selected>Medium</option>
+              <option value="LARGE">Large</option>
+            </select>
+
+            <!-- Поле для количества пиццы -->
+            <label for="quantity">Anzahl:</label>
+            <input type="number" th:name="quantity" class="form-control mt-2" value="1" min="1">
+
+            <!-- Поле для отображения цены -->
+            <p class="mt-2"><strong>Gesamtpreis: </strong>
+              <span th:id="'total-price-' + ${pizza.id}" th:text="${pizza.basePrice} + ' €'" th:data-base-price="${pizza.basePrice}"></span>
+            </p>
+
+            <!-- Кнопка добавления пиццы в корзину -->
+            <button class="btn btn-outline-primary mt-2" type="submit">Add to Cart</button>
+          </form>
+        </div>
+
+        <!-- Кнопки действий (Редактировать и Удалить) -->
+        <div class="card-footer text-center">
+          <!-- Кнопка редактирования -->
+          <a th:href="@{/admin/pizzas/edit/{id}(id=${pizza.id})}" class="btn btn-outline-success mt-2">
+            <i class="fas fa-edit"></i> Bearbeiten
+          </a>
+
+          <!-- Форма удаления -->
+          <form th:action="@{/admin/pizzas/delete/{id}(id=${pizza.id})}" method="post" class="d-inline">
+            <button type="submit" class="btn btn-outline-danger mt-2">
+              <i class="fas fa-trash-alt"></i> Löschen
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-4">
+
+      </div>
+      <div class="about-us">
+          <div class="container">
+              <div class="row">
+                  <div class="col-md-6">
+                      <img src="/images/pizza2.jpg" alt="Gebäudeskizze" class="img-fluid">
+                  </div>
+                  <div class="col-md-6">
+                      <h2>Über Uns</h2>
+                      <p>
+                          Wir sind eine Online-Pizzeria, die es sich zur Aufgabe gemacht hat, Ihnen köstliche und frisch zubereitete Pizzen direkt nach Hause zu liefern. Mit hochwertigen Zutaten und einem engagierten Team bieten wir Ihnen ein unvergessliches Geschmackserlebnis.
+                      </p>
+                      <div class="row g-3">
+                          <div class="col-6">
+                              <div class="value-item d-flex align-items-center p-3 shadow-sm">
+                                  <i class="fas fa-lemon me-3" style="font-size: 30px; color: #ffaa33"></i>
+                                  <p>Frische Zutaten</p>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                              <div class="value-item d-flex align-items-center p-3 shadow-sm">
+                                  <i class="fas fa-truck me-3" style="font-size: 30px; color: #ffaa33"></i>
+                                  <p>Schnelle Lieferung</p>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                              <div class="value-item d-flex align-items-center p-3 shadow-sm">
+                                  <i class="fas fa-pizza-slice me-3" style="font-size: 30px; color: #ffaa33"></i>
+                                  <p>Handgemachte Pizza</p>
+                              </div>
+                          </div>
+                          <div class="col-6">
+                              <div class="value-item d-flex align-items-center p-3 shadow-sm">
+                                  <i class="fas fa-smile me-3" style="font-size: 30px; color: #ffaa33"></i>
+                                  <p>Kundenzufriedenheit</p>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+
+      <div class="footer-basic">
+          <footer>
+              <div class="social">
+                  <a href="#"><i class="fab fa-instagram"></i></a>
+                  <a href="#"><i class="fab fa-snapchat"></i></a>
+                  <a href="#"><i class="fab fa-twitter"></i></a>
+                  <a href="#"><i class="fab fa-facebook"></i></a>
+              </div>
+              <ul class="list-inline">
+                  <li class="list-inline-item"><a href="#">Home</a></li>
+                  <li class="list-inline-item"><a href="#">Services</a></li>
+                  <li class="list-inline-item"><a href="#">About</a></li>
+                  <li class="list-inline-item"><a href="#">Terms</a></li>
+                  <li class="list-inline-item"><a href="#">Privacy Policy</a></li>
+              </ul>
+              <p class="copyright">Gruppe 5 © 2024</p>
+          </footer>
+      </div>
+  
+  
+
+
+</div>
+  </div>
+
+</div>
+
+<script>
+  function updatePrice(pizzaId) {
+    var size = document.getElementById('size-' + pizzaId).value;
+    var quantity = parseInt(document.getElementById('quantity-' + pizzaId).value);
+    var priceElement = document.getElementById('total-price-' + pizzaId);
+    var basePrice = parseFloat(priceElement.getAttribute('data-base-price'));
+
+    if (isNaN(basePrice)) {
+      console.error("Error:", pizzaId);
+      return;
+    }
+
+    if (size === 'SMALL') {
+      basePrice -= 2;
+    } else if (size === 'LARGE') {
+      basePrice += 2;
+    }
+
+    var totalPrice = basePrice * quantity;
+
+    console.log("New price: ", basePrice.toFixed(2) + " €", "Total: ", totalPrice.toFixed(2) + " €");
+
+    priceElement.textContent = basePrice.toFixed(2) + " €";
+    document.getElementById('total-price-' + pizzaId).textContent = totalPrice.toFixed(2) + " €";
+  }
+
+  document.querySelectorAll('.form-select').forEach(function(selectElement) {
+    var pizzaId = selectElement.id.split('-')[1];
+    updatePrice(pizzaId);
+  });
+
+  document.querySelectorAll('.form-select').forEach(function(selectElement) {
+    selectElement.addEventListener('change', function() {
+      var pizzaId = this.id.split('-')[1];
+      updatePrice(pizzaId);
+    });
+  });
+
+  document.querySelectorAll('.form-control').forEach(function(inputElement) {
+    inputElement.addEventListener('input', function() {
+      var pizzaId = this.id.split('-')[1];
+      updatePrice(pizzaId);
+    });
+  });
+
+  function updateCartCount() {
+    var cartCount = parseInt(document.getElementById('cart-count').textContent);
+    cartCount += 1;
+
+    document.getElementById('cart-count').textContent = cartCount;
+  }
+  document.querySelectorAll('form').forEach(function(form) {
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      updateCartCount();
+      form.submit();
+    });
+  });
+</script>
+</body>
+</html>

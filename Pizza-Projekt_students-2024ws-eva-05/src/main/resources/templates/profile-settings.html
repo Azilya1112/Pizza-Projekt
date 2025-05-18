@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profil-Einstellungen</title>
+  <link rel="stylesheet" href="/fonts/material-icon/css/material-design-iconic-font.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<style>
+  .delete-button {
+    background-color: #c3552f;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+</style>
+<body>
+
+<div class="main">
+  <section class="sign-in">
+    <div class="container">
+      <div class="signin-content">
+        <div class="signin-image">
+          <img src="/images/avatar1.png" alt="profile image">
+        </div>
+
+        <div class="signin-form">
+          <h2 class="form-title">Mein Profil</h2>
+
+          <!-- Просмотр текущих данных профиля -->
+          <div class="profile-view">
+            <h3>Meine Daten</h3>
+            <p><strong>Benutzername:</strong> <span th:text="${user.username}"></span></p>
+
+            <!-- Просмотр списка адресов -->
+            <h3>Lieferadressen</h3>
+            <ul class="address-list">
+              <li th:each="address : ${addresses}">
+                <span th:text="${address.street} + ' ' + ${address.houseNumber} + ', ' + ${address.postalCode} + ' ' + ${address.town}"></span>
+
+                <!-- Кнопка для удаления адреса -->
+                <form th:action="@{/profile-settings/delete-address}" method="post" class="inline-form">
+                  <input type="hidden" name="addressId" th:value="${address.id}">
+                  <button type="submit" class="delete-button">Löschen</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+
+          <h3>Benutzerdaten bearbeiten</h3>
+
+          <!-- Обработка ошибок -->
+          <div th:if="${errorMessage != null}" class="error-message me-2">
+            <p th:text="${errorMessage}"></p>
+          </div>
+
+          <form th:action="@{/profile-settings/update-profile}" method="post" class="register-form">
+            <input type="hidden" name="id" th:value="${user.id}">
+
+            <!-- Поле для нового имени пользователя -->
+            <div class="form-group">
+              <label for="new-username"><i class="zmdi zmdi-account material-icons-name"></i></label>
+              <input type="text" id="new-username" name="username" th:value="${user.username}" placeholder="Neuer Benutzername" readonly>
+            </div>
+
+            <!-- Поле для текущего пароля -->
+            <div class="form-group">
+              <label for="current-password"><i class="zmdi zmdi-lock"></i></label>
+              <input type="password" id="current-password" name="currentPassword" placeholder="Aktuelles Passwort" required>
+            </div>
+
+            <!-- Поле для нового пароля -->
+            <div class="form-group">
+              <label for="new-password"><i class="zmdi zmdi-lock"></i></label>
+              <input type="password" id="new-password" name="newPassword" placeholder="Neues Passwort">
+            </div>
+
+            <div class="form-group form-button">
+              <input type="submit" name="update-profile" class="form-submit" value="Änderungen speichern">
+            </div>
+          </form>
+
+          <h3>Neue Adresse hinzufügen</h3>
+
+          <form th:action="@{/profile-settings/add-address}" method="post" class="register-form">
+            <div class="form-group">
+              <label for="street"><i class="zmdi zmdi-pin"></i></label>
+              <input type="text" id="street" name="street" placeholder="Straße eingeben" required>
+            </div>
+
+            <div class="form-group">
+              <label for="houseNumber"><i class="zmdi zmdi-home"></i></label>
+              <input type="text" id="houseNumber" name="houseNumber" placeholder="Hausnummer eingeben" required>
+            </div>
+
+            <div class="form-group">
+              <label for="postalCode"><i class="zmdi zmdi-mail-send"></i></label>
+              <input type="text" id="postalCode" name="postalCode" placeholder="Postleitzahl eingeben" required>
+            </div>
+
+            <div class="form-group">
+              <label for="town"><i class="zmdi zmdi-city"></i></label>
+              <input type="text" id="town" name="town" placeholder="Stadt eingeben" required>
+            </div>
+
+            <div class="form-group form-button">
+              <input type="submit" name="add-address" class="form-submit" value="Adresse hinzufügen">
+            </div>
+          </form>
+          <a href="\" class="signup-image-link">Zurück zur Startseite</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script src="vendor/jquery/jquery.min.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+</html>
